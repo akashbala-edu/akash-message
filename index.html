@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>When World Gets Loud</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+      display: flex;
+	  font-style: italic;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Georgia', serif;
+    }
+
+    .quote {
+      font-size: 1.5rem;
+      text-align: center;
+      margin: 20px;
+      padding: 0 20px;
+    }
+
+    .images {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .images img {
+      width: 100%;
+      max-width: 47%;
+      height: auto;
+      border: 1px solid #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.04);
+    }
+
+    .audio-player {
+      margin-top: 30px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .vinyl {
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle at center, #000 40%, #333 41%, #000 42%, #222 60%, #000 61%);
+  border-radius: 50%;
+  animation: spin 5s linear infinite;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), inset 0 0 10px #111;
+  transform: perspective(800px) rotateX(15deg);
+  position: relative;
+  overflow: hidden;
+}
+
+.vinyl::before,
+.vinyl::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  transform-origin: center;
+}
+
+.vinyl::before {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(20deg);
+}
+
+.vinyl::after {
+  top: 50px;
+  left: 30%;
+  transform: translateX(-50%) rotate(-25deg);
+}
+
+.center-hole {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
+}
+
+.scratch {
+  position: absolute;
+  width: 60%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  top: 50%;
+  left: 50%;
+  transform-origin: left center;
+}
+
+.scratch:nth-child(2) {
+  transform: rotate(15deg) translateX(-50%);
+}
+.scratch:nth-child(3) {
+  transform: rotate(45deg) translateX(-50%);
+}
+.scratch:nth-child(4) {
+  transform: rotate(75deg) translateX(-50%);
+}
+.scratch:nth-child(5) {
+  transform: rotate(105deg) translateX(-50%);
+}
+
+@keyframes spin {
+  from {
+    transform: perspective(800px) rotateX(15deg) rotate(0deg);
+  }
+  to {
+    transform: perspective(800px) rotateX(15deg) rotate(360deg);
+  }
+}
+
+
+    .custom-audio {
+      background-color: #222;
+      border: 1px solid #444;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+    }
+
+    .play-btn {
+      cursor: pointer;
+      background: none;
+      border: 2px solid white;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="quote">"A place for when the world's too loud."</div>
+
+  <div class="audio-player">
+    <div class="vinyl"></div>
+    <div class="custom-audio">
+      <button class="play-btn" onclick="toggleAudio()">Play</button>
+      <span id="status">Paused</span>
+    </div>
+    <audio id="audio" src="audio.mp3"></audio>
+  </div>
+  
+ </p>
+ </p>
+
+  <div class="images">
+    <img src="image1.JPG" alt="Image 1">
+    <img src="image2.JPG" alt="Image 2">
+  </div>
+
+  <script>
+    const audio = document.getElementById('audio');
+    const btn = document.querySelector('.play-btn');
+    const status = document.getElementById('status');
+
+    function toggleAudio() {
+      if (audio.paused) {
+        audio.play();
+        btn.textContent = 'Pause';
+        status.textContent = 'Playing';
+      } else {
+        audio.pause();
+        btn.textContent = 'Play';
+        status.textContent = 'Paused';
+      }
+    }
+  </script>
+</body>
+</html>
