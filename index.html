@@ -3,189 +3,305 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>When World Gets Loud</title>
+  <title>Memory Capsule</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: black;
+      background-color: #000;
       color: white;
-      display: flex;
-	  font-style: italic;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
       font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .quote-container {
+      position: relative;
+      margin-top: 40px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-style: italic;
+      text-align: center;
+      width: 90%;
+      max-width: 800px;
     }
 
     .quote {
-      font-size: 1.5rem;
-      text-align: center;
-      margin: 20px;
-      padding: 0 20px;
+      opacity: 0;
+      position: absolute;
+      transition: opacity 2s ease-in-out;
     }
 
-    .images {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
+    .quote.active {
+      opacity: 1;
     }
 
-    .images img {
-      width: 100%;
-      max-width: 47%;
-      height: auto;
-      border: 1px solid #fff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.04);
-    }
-
-    .audio-player {
-      margin-top: 30px;
+    .audio-container {
       position: relative;
+      margin-top: 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .vinyl {
-  width: 120px;
-  height: 120px;
-  background: radial-gradient(circle at center, #000 40%, #333 41%, #000 42%, #222 60%, #000 61%);
-  border-radius: 50%;
-  animation: spin 5s linear infinite;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), inset 0 0 10px #111;
-  transform: perspective(800px) rotateX(15deg);
-  position: relative;
-  overflow: hidden;
-}
+    #audio-player {
+      display: none;
+    }
 
-.vinyl::before,
-.vinyl::after {
-  content: '';
-  position: absolute;
-  width: 2px;
-  height: 30px;
-  background: rgba(255, 255, 255, 0.1);
-  transform-origin: center;
-}
-
-.vinyl::before {
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%) rotate(20deg);
-}
-
-.vinyl::after {
-  top: 50px;
-  left: 30%;
-  transform: translateX(-50%) rotate(-25deg);
-}
-
-.center-hole {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 8px;
-  height: 8px;
-  background-color: white;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.7);
-}
-
-.scratch {
-  position: absolute;
-  width: 60%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  top: 50%;
-  left: 50%;
-  transform-origin: left center;
-}
-
-.scratch:nth-child(2) {
-  transform: rotate(15deg) translateX(-50%);
-}
-.scratch:nth-child(3) {
-  transform: rotate(45deg) translateX(-50%);
-}
-.scratch:nth-child(4) {
-  transform: rotate(75deg) translateX(-50%);
-}
-.scratch:nth-child(5) {
-  transform: rotate(105deg) translateX(-50%);
-}
-
-@keyframes spin {
-  from {
-    transform: perspective(800px) rotateX(15deg) rotate(0deg);
-  }
-  to {
-    transform: perspective(800px) rotateX(15deg) rotate(360deg);
-  }
-}
-
-
-    .custom-audio {
-      background-color: #222;
-      border: 1px solid #444;
-      padding: 10px 20px;
-      border-radius: 5px;
+    .controls {
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
-      color: white;
+      margin-top: 10px;
     }
 
-    .play-btn {
+    .btn {
+      background-color: transparent;
+      color: gold;
+      border: 2px solid gold;
+      padding: 10px 20px;
+      font-size: 16px;
       cursor: pointer;
-      background: none;
-      border: 2px solid white;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 1rem;
+      font-family: 'Georgia', serif;
     }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background-color: #444;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress {
+      height: 100%;
+      background-color: gold;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 30px;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      text-align: center;
+      width: 80%;
+    }
+
+    .images {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .images img {
+      max-width: 90vw;
+      max-height: 40vh;
+      object-fit: contain;
+      border: 1px solid #444;
+    }
+
+    #typewriter {
+      font-family: 'Georgia', serif;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 0.15em solid gold;
+      width: 0;
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+	
+	#ambientCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0.25;
+  pointer-events: none;
+  filter: blur(50px);
+}
+
   </style>
 </head>
 <body>
-  <div class="quote">"A place for when the world's too loud."</div>
-
-  <div class="audio-player">
-    <div class="vinyl"></div>
-    <div class="custom-audio">
-      <button class="play-btn" onclick="toggleAudio()">Play</button>
-      <span id="status">Paused</span>
-    </div>
-    <audio id="audio" src="audio.mp3"></audio>
+  <div class="quote-container">
+    <div class="quote active">“You’re not alone. You never were.”</div>
+    <div class="quote">“If the world feels heavy, I’ll carry it in silence so you don’t have to.”</div>
+    <div class="quote">“Every time this plays, I want you to remember that someone still sees you.”</div>
+    <div class="quote">“I’m never too gone to listen to you.”</div>
+    <div class="quote">"You don’t need to speak. Just stay."</div>
+    <div class="quote">"You don’t have to say my name—just feel it when the world goes quiet."</div>
+    <div class="quote">"I don’t need to be near you to be with you."</div>
+    <div class="quote">"I built this moment to stay with you longer than I ever could."</div>
   </div>
-  
- </p>
- </p>
+
+  <div class="audio-container">
+    <audio id="audio-player">
+      <source src="audio.mp3" type="audio/mp3">
+      Your browser does not support the audio element.
+    </audio>
+
+    <div class="controls">
+      <button class="btn" id="play-pause">Play</button>
+    </div>
+    <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+    </div>
+  </div>
+
+  <div class="note" id="note">
+    You can stay until the song ends, I will too.
+  </div>
+
 
   <div class="images">
-    <img src="image1.JPG" alt="Image 1">
-    <img src="image2.JPG" alt="Image 2">
+    <img src="image1.jpg" alt="Memory Image 1">
+    <img src="image2.jpg" alt="Memory Image 2">
   </div>
-
+  
+  <div></div>
+  
+  <canvas id="ambientCanvas"></canvas>
+  
   <script>
-    const audio = document.getElementById('audio');
-    const btn = document.querySelector('.play-btn');
-    const status = document.getElementById('status');
+    const quotes = document.querySelectorAll('.quote');
+    let quoteIndex = 0;
+    setInterval(() => {
+      quotes[quoteIndex].classList.remove('active');
+      quoteIndex = (quoteIndex + 1) % quotes.length;
+      quotes[quoteIndex].classList.add('active');
+    }, 30000);
 
-    function toggleAudio() {
+    const audio = document.getElementById('audio-player');
+    const playPauseBtn = document.getElementById('play-pause');
+    const progress = document.getElementById('progress');
+    const note = document.getElementById('note');
+    const typewriterEl = document.getElementById('typewriter');
+
+    playPauseBtn.addEventListener('click', () => {
       if (audio.paused) {
         audio.play();
-        btn.textContent = 'Pause';
-        status.textContent = 'Playing';
+        playPauseBtn.textContent = 'Pause';
       } else {
         audio.pause();
-        btn.textContent = 'Play';
-        status.textContent = 'Paused';
+        playPauseBtn.textContent = 'Play';
       }
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progress.style.width = percent + '%';
+
+      if (audio.currentTime > 5 && audio.currentTime < audio.duration - 5) {
+        note.style.opacity = 1;
+      } else {
+        note.style.opacity = 0;
+      }
+
+      if (audio.currentTime > audio.duration - 15 && !audio.typewriterPlayed) {
+        startTypewriter("I will always wait for you here.");
+        audio.typewriterPlayed = true;
+      }
+    });
+
+    function startTypewriter(text, speed = 100) {
+      let i = 0;
+      typewriterEl.style.width = "0";
+      typewriterEl.textContent = "";
+      typewriterEl.style.opacity = "1";
+
+      function type() {
+        if (i < text.length) {
+          typewriterEl.textContent += text.charAt(i);
+          typewriterEl.style.width = i + "ch";
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
     }
+	
+	const canvas = document.getElementById('ambientCanvas');
+const ctx = canvas.getContext('2d');
+
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
+
+window.addEventListener('resize', () => {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+});
+
+const orbCount = 15;
+const orbs = [];
+
+function random(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+for (let i = 0; i < orbCount; i++) {
+  orbs.push({
+    x: random(0, width),
+    y: random(0, height),
+    radius: random(100, 200),
+    dx: random(-0.3, 0.3),
+    dy: random(-0.3, 0.3),
+    color: `rgba(${Math.floor(random(200,255))}, ${Math.floor(random(180,220))}, ${Math.floor(random(50,100))}, ${random(0.02, 0.06)})`
+  });
+}
+
+function draw() {
+  ctx.clearRect(0, 0, width, height);
+  for (let orb of orbs) {
+    let gradient = ctx.createRadialGradient(orb.x, orb.y, 0, orb.x, orb.y, orb.radius);
+    gradient.addColorStop(0, orb.color);
+    gradient.addColorStop(1, 'transparent');
+    
+    ctx.beginPath();
+    ctx.fillStyle = gradient;
+    ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2, false);
+    ctx.fill();
+
+    orb.x += orb.dx;
+    orb.y += orb.dy;
+
+    // Bounce off edges
+    if (orb.x < 0 || orb.x > width) orb.dx *= -1;
+    if (orb.y < 0 || orb.y > height) orb.dy *= -1;
+  }
+
+  requestAnimationFrame(draw);
+}
+
+draw();
   </script>
+
 </body>
 </html>
